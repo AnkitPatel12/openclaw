@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PORT="${CLAWGUARD_PORT:-8000}"
+
+if [[ -f "$BASE_DIR/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$BASE_DIR/.env"
+  set +a
+fi
+
+if [[ "${CLAWGUARD_REGISTRY_ADDRESS:-}" == *"..."* ]]; then
+  unset CLAWGUARD_REGISTRY_ADDRESS
+fi
+
+if [[ "${CLAWGUARD_PRIVATE_KEY:-}" == *"..."* ]]; then
+  unset CLAWGUARD_PRIVATE_KEY
+fi
+
+export PYTHONPATH="$BASE_DIR/..:${PYTHONPATH:-}"
+
+exec "$BASE_DIR/.venv/bin/python" -m uvicorn clawguard.api:app --host 127.0.0.1 --port "$PORT"

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if [[ -f "$BASE_DIR/.env" ]]; then
+  set -a
+  # shellcheck disable=SC1091
+  source "$BASE_DIR/.env"
+  set +a
+fi
+
+if [[ "${CLAWGUARD_REGISTRY_ADDRESS:-}" == *"..."* ]]; then
+  unset CLAWGUARD_REGISTRY_ADDRESS
+fi
+
+if [[ "${CLAWGUARD_PRIVATE_KEY:-}" == *"..."* ]]; then
+  unset CLAWGUARD_PRIVATE_KEY
+fi
+
+exec "$BASE_DIR/.venv/bin/python" "$BASE_DIR/scripts/scan.py" "$@"

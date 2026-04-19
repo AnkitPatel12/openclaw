@@ -1,0 +1,34 @@
+{
+  "id": "clawguard-auto",
+  "name": "ClawGuard Auto",
+  "description": "Automatically scans selected tool inputs with the managed ClawGuard skill before tool execution.",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "scannerPath": {
+        "type": "string",
+        "description": "Path to the managed ClawGuard scanner wrapper."
+      },
+      "scanTools": {
+        "type": "array",
+        "description": "Tool names that should be scanned before execution.",
+        "items": { "type": "string" }
+      },
+      "blockOnSanitize": {
+        "type": "boolean",
+        "description": "Block tool execution when ClawGuard returns sanitize."
+      },
+      "maxUrlBytes": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Maximum response size to download when scanning URL inputs."
+      },
+      "timeoutMs": {
+        "type": "integer",
+        "minimum": 1000,
+        "description": "Timeout for ClawGuard subprocesses and URL scans."
+      }
+    }
+  }
+}
